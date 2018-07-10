@@ -12,11 +12,11 @@ public class Main {
 
 	public static void main(String [ ] args) throws ParseException, IOException
 	{
-		String t = "all";
+		String t = "";
 		//String testhl = "HomeLoanService/HomeLoanWS/doSubmit/approve-060/partial-installment";
 		//String test2slash ="CommonService/UnsecureWS/login";
 		//String testhaveid = "CommonService/dropdownWS/getDropdown/HL_GENDER";
-		logAna("fls2-service-log-"+t,"F:\\fls2_log\\");
+		logAna("fls2-service-log_"+t,"F:\\fls2_log\\");
 		/*
 		System.out.println(subSrtingIdUrlNotHomeLoanWS(testhl));
 		System.out.println(subSrtingIdUrlNotHomeLoanWS(test2slash));
@@ -79,23 +79,33 @@ public class Main {
 			String[] datalog = list.get(0).split(",");
 			String service_name=datalog[0];
 			int sum_time = 0;
+			int min_time = Integer.MAX_VALUE;
+			int max_time = Integer.MIN_VALUE;
+			int timetmp = 0;
 			for(int i=0;i<list.size();i++) {
 				datalog = list.get(i).split(",");
 				svtmp = datalog[0];
+				timetmp = Integer.parseInt(datalog[1]);
 				if(!service_name.equals(svtmp)) {
-					avglist.add(sum_time/count+","+service_name.replaceFirst("/", ","));
+					avglist.add(max_time+","+min_time+","+sum_time/count+","+count+","+service_name.replaceFirst("/", ","));
 					service_name = svtmp;
 					sum_time = 0;
 					count=0;
+					min_time = Integer.MAX_VALUE;
+					max_time = Integer.MIN_VALUE;
 				}
-				sum_time += Integer.parseInt(datalog[1]);
+				if(min_time > timetmp)
+					min_time  = timetmp;
+				if(max_time < timetmp)
+					max_time = timetmp;
+				sum_time += timetmp;
 				count++;
 			}
-			avglist.add((sum_time/count)+","+service_name.replaceFirst("/", ","));
-			writeAvgFile("avg-"+file_name,avglist);
+			avglist.add(max_time+","+min_time+","+(sum_time/count)+","+count+","+service_name.replaceFirst("/", ","));
+			writeAvgFile("analyzed-"+file_name,avglist);
 			
 			//System.out.println(serviceList");
-			writeFile(file_name,stimeList, sUrlList);
+			writeFile("all-data-"+file_name,stimeList, sUrlList);
 		}
 		else {
 			System.out.println("Empty");
@@ -176,7 +186,7 @@ public class Main {
         PrintWriter pw = new PrintWriter(csvfile);
         StringBuilder sb = new StringBuilder();
         //head .csv
-        sb.append("Period(ms),Service,Operation");
+        sb.append("MaxPeriod(ms),MinPeriod(ms),AvgPeriod(ms),Amount,Service,Operation");
         sb.append('\n');
         for(int i =0; i<col1.size();i++) {
         	sb.append(col1.get(i));
