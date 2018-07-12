@@ -53,7 +53,7 @@ public class Main {
 					 svUrl = strLine.substring(strLine.lastIndexOf("/services/")+10);
 					 //skip 17
 					   if(!svTime.equals("")) {
-						   if(NotInDateTime(svDate, "2018-07-05 17:53:00", "2018-07-05 18:25:00") && NotInDateTime(svDate, "2018-07-06 18:45:00", "2018-07-06 19:01:00")) {
+						   if(NotInDatetime(svDate)) {
 							   stimeList.add(svDate+","+svTime);
 							   sUrlList.add(svUrl.replaceFirst("/", ","));
 							   //serviceList.add(svDate+","+svTime+","+svUrl);
@@ -81,13 +81,17 @@ public class Main {
 			int sum_time = 0;
 			int min_time = Integer.MAX_VALUE;
 			int max_time = Integer.MIN_VALUE;
+			int avg_time = 0;
+			int axavg_time =0;
 			int timetmp = 0;
 			for(int i=0;i<list.size();i++) {
 				datalog = list.get(i).split(",");
 				svtmp = datalog[0];
 				timetmp = Integer.parseInt(datalog[1]);
 				if(!service_name.equals(svtmp)) {
-					avglist.add(max_time+","+min_time+","+sum_time/count+","+count+","+service_name.replaceFirst("/", ","));
+					avg_time = sum_time/count;
+					axavg_time = avg_time*count;
+					avglist.add(max_time+","+min_time+","+avg_time+","+count+","+axavg_time+","+service_name.replaceFirst("/", ","));
 					service_name = svtmp;
 					sum_time = 0;
 					count=0;
@@ -102,10 +106,10 @@ public class Main {
 				count++;
 			}
 			avglist.add(max_time+","+min_time+","+(sum_time/count)+","+count+","+service_name.replaceFirst("/", ","));
-			writeAvgFile("analyzed-"+file_name,avglist);
+			writeAnalyzedFile("analyzed-"+file_name+java.time.LocalDate.now(),avglist);
 			
 			//System.out.println(serviceList");
-			writeFile("all-data-"+file_name,stimeList, sUrlList);
+			writeFile("all-data-"+file_name+java.time.LocalDate.now(),stimeList, sUrlList);
 		}
 		else {
 			System.out.println("Empty");
@@ -113,6 +117,12 @@ public class Main {
 		
 		
 	}
+	private static boolean NotInDatetime(String svDate) throws ParseException {
+		return 	NotInDateTime(svDate, "2000-07-05 00:00:00", "2018-07-10 13:00:00");
+				//&& NotInDateTime(svDate, "2018-07-05 17:53:00", "2018-07-05 18:25:00") 
+				//&& NotInDateTime(svDate, "2018-07-06 18:45:00", "2018-07-06 19:01:00");
+	}
+	
 	private static String subSrtingIdUrlNotHomeLoanWS(String url) {
 		String[] urlArray = url.split("/");
 		if(!(urlArray.length==0)) {
@@ -142,9 +152,9 @@ public class Main {
 	}
 	public static boolean serviceLogLine(String str) {
 		//greater than .. sec
-		//Pattern pattern = Pattern.compile(".*2018-07-0[4-9].*service.*[2-9]\\d{3} ms\\].*");
+		//Pattern pattern = Pattern.compile(".*2018-07-[0-9][4-9].*service.*[2-9]\\d{3} ms\\].*");
 		//All
-		Pattern pattern = Pattern.compile(".*2018-07-0[4-9].*service.* ms\\].*");
+		Pattern pattern = Pattern.compile(".*2018-07-[1-9][0-9].*service.* ms\\].*");
 		Matcher matcher	= pattern.matcher(str);
 		
 		return matcher.matches();
@@ -181,12 +191,12 @@ public class Main {
         System.out.println("done!");
     }
 	
-	public static void writeAvgFile(String filename,List<String> col1) throws FileNotFoundException{
+	public static void writeAnalyzedFile(String filename,List<String> col1) throws FileNotFoundException{
 		File csvfile = new File(filename+".csv");
         PrintWriter pw = new PrintWriter(csvfile);
         StringBuilder sb = new StringBuilder();
         //head .csv
-        sb.append("MaxPeriod(ms),MinPeriod(ms),AvgPeriod(ms),Amount,Service,Operation");
+        sb.append("MaxPeriod(ms),MinPeriod(ms),AvgPeriod(ms),Amount,AxAvg,Service,Operation");
         sb.append('\n');
         for(int i =0; i<col1.size();i++) {
         	sb.append(col1.get(i));
@@ -195,7 +205,7 @@ public class Main {
 
         pw.write(sb.toString());
         pw.close();
-        System.out.println("Avg done!");
+        System.out.println("Analyzed done!");
     }
 	
 	
