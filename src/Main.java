@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -105,7 +104,7 @@ public class Main {
 				sum_time += timetmp;
 				count++;
 			}
-			avglist.add(max_time+","+min_time+","+(sum_time/count)+","+count+","+service_name.replaceFirst("/", ","));
+			avglist.add(max_time+","+min_time+","+avg_time+","+count+","+axavg_time+","+service_name.replaceFirst("/", ","));
 			writeAnalyzedFile("analyzed-"+file_name+java.time.LocalDate.now(),avglist);
 			
 			//System.out.println(serviceList");
@@ -118,7 +117,7 @@ public class Main {
 		
 	}
 	private static boolean NotInDatetime(String svDate) throws ParseException {
-		return 	NotInDateTime(svDate, "2000-07-05 00:00:00", "2018-07-10 13:00:00");
+		return 	NotInDateTime(svDate, "2000-07-05 00:00:00", "2018-07-16 12:59:00");
 				//&& NotInDateTime(svDate, "2018-07-05 17:53:00", "2018-07-05 18:25:00") 
 				//&& NotInDateTime(svDate, "2018-07-06 18:45:00", "2018-07-06 19:01:00");
 	}
