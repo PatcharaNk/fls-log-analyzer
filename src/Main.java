@@ -1,4 +1,6 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -15,7 +17,8 @@ public class Main {
 		//String testhl = "HomeLoanService/HomeLoanWS/doSubmit/approve-060/partial-installment";
 		//String test2slash ="CommonService/UnsecureWS/login";
 		//String testhaveid = "CommonService/dropdownWS/getDropdown/HL_GENDER";
-		logAna("fls2-service-log_"+t,"F:\\fls2_log\\");
+		logAna("sit-fls2-service-log_"+t,"F:\\fls2_log\\");
+//		logAna("uat-fls2-service-log_"+t,"F:\\fls2_uat_log\\");
 		/*
 		System.out.println(subSrtingIdUrlNotHomeLoanWS(testhl));
 		System.out.println(subSrtingIdUrlNotHomeLoanWS(test2slash));
@@ -117,7 +120,7 @@ public class Main {
 		
 	}
 	private static boolean NotInDatetime(String svDate) throws ParseException {
-		return 	NotInDateTime(svDate, "2000-07-05 00:00:00", "2018-07-16 12:59:00");
+		return 	NotInDateTime(svDate, "2000-07-05 00:00:00", "2018-07-22 13:00:00");
 				//&& NotInDateTime(svDate, "2018-07-05 17:53:00", "2018-07-05 18:25:00") 
 				//&& NotInDateTime(svDate, "2018-07-06 18:45:00", "2018-07-06 19:01:00");
 	}
@@ -153,7 +156,7 @@ public class Main {
 		//greater than .. sec
 		//Pattern pattern = Pattern.compile(".*2018-07-[0-9][4-9].*service.*[2-9]\\d{3} ms\\].*");
 		//All
-		Pattern pattern = Pattern.compile(".*2018-07-[1-9][0-9].*service.* ms\\].*");
+		Pattern pattern = Pattern.compile(".*2018-[0-1][0-9]-[1-9][0-9].*service.* ms\\].*");
 		Matcher matcher	= pattern.matcher(str);
 		
 		return matcher.matches();
