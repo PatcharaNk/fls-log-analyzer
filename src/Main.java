@@ -17,7 +17,8 @@ public class Main {
 		//String testhl = "HomeLoanService/HomeLoanWS/doSubmit/approve-060/partial-installment";
 		//String test2slash ="CommonService/UnsecureWS/login";
 		//String testhaveid = "CommonService/dropdownWS/getDropdown/HL_GENDER";
-		logAna("sit-fls2-service-log_"+t,"F:\\fls2_log\\");
+//		logAna("sit-fls2-service-log_"+t,"F:\\fls2_log\\");
+		logAna("nft-fls2-service-log_"+t,"C:\\Users\\patchara.na\\Documents\\logs-nft");
 //		logAna("uat-fls2-service-log_"+t,"F:\\fls2_uat_log\\");
 		/*
 		System.out.println(subSrtingIdUrlNotHomeLoanWS(testhl));
@@ -33,8 +34,9 @@ public class Main {
 		//List<String> serviceList = new ArrayList<>();
 		File file = new File(Path);
 		File[] files = file.listFiles();
+//		File f = files[6];
 		for(File f: files){
-		//for(int i =0;i<1;i++){
+//		for(int i =0;i<1;i++){
 			try{
 				//PrintWriter writer = new PrintWriter(newFile+".txt", "UTF-8");
 				
@@ -128,7 +130,7 @@ public class Main {
 	private static String subSrtingIdUrlNotHomeLoanWS(String url) {
 		String[] urlArray = url.split("/");
 		if(!(urlArray.length==0)) {
-			if(!(urlArray[0].equals("HomeLoanService"))) {
+			if(!(urlArray[0].equals("HomeLoanService")) && urlArray.length != 1) {
 				//System.out.println(url);
 				if(urlArray.length>2) {
 					return urlArray[0]+"/"+urlArray[1]+"/"+urlArray[2];
@@ -156,7 +158,7 @@ public class Main {
 		//greater than .. sec
 		//Pattern pattern = Pattern.compile(".*2018-07-[0-9][4-9].*service.*[2-9]\\d{3} ms\\].*");
 		//All
-		Pattern pattern = Pattern.compile(".*2018-[0-1][0-9]-[1-9][0-9].*service.* ms\\].*");
+		Pattern pattern = Pattern.compile(".*2018-[0-1][0-9]-[0-3][0-9].*service.*IN FLS2 -.* ms\\].*");
 		Matcher matcher	= pattern.matcher(str);
 		
 		return matcher.matches();
